@@ -5,6 +5,7 @@
  */
 package pe.conexion.ejecutables;
 
+import java.util.List;
 import java.util.Scanner;
 import pe.conexion.ado.interfaces.UsuarioDAO;
 import pe.conexion.ado.mysql.MySQLUsuario;
@@ -25,11 +26,17 @@ public class Ejecutar {
         
         MySQLUsuario mysqluser = new MySQLUsuario();
         try {
-            Usuario usuario = mysqluser.obtenerPorId(4);
-            System.out.println(usuario);
+            List<Usuario> listado = mysqluser.listar();
+            
+            for (Usuario u : listado) {
+                System.out.println(u);
+            }
         } catch (ExcepcionGeneral eg) {
             System.out.println(eg.getMessage());
         }
+//        Usuario{idUsuario=1, usuario=christian, clave=1234, correo=christian@gmail.com}
+//        Usuario{idUsuario=2, usuario=Usuario2, clave=1234, correo=usuario@gmail.com}
 //        Usuario{idUsuario=4, usuario=Tom, clave=d9ffaca46d5990ec39501bcdf22ee7a1, correo=tom@gmail.com}
+//        Usuario{idUsuario=6, usuario=Tom, clave=d9ffaca46d5990ec39501bcdf22ee7a1, correo=tom@gmail.com}
     }
 }
