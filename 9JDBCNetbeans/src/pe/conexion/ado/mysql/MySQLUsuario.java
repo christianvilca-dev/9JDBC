@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import pe.conexion.ado.interfaces.UsuarioDAO;
 import pe.conexion.excepciones.ExcepcionGeneral;
@@ -41,7 +42,8 @@ public class MySQLUsuario implements UsuarioDAO{
     public void insert(Usuario o) throws ExcepcionGeneral{
         try {
             conexion = new MySQLConexion().conectar();
-            sentencia = conexion.prepareStatement(INSERTAR);
+            // RETURN_GENERATED_KEYS -> nos permite obtener las llaves generadas de mysql
+            sentencia = conexion.prepareStatement(INSERTAR, Statement.RETURN_GENERATED_KEYS);
             sentencia.setString(1, o.getUsuario());
             sentencia.setString(2, o.getClave());
             sentencia.setString(3, o.getCorreo());
@@ -60,6 +62,8 @@ public class MySQLUsuario implements UsuarioDAO{
             }
         } catch (SQLException sqle) {
             throw new ExcepcionGeneral(sqle.getMessage());
+        } finally {
+            cerrarConexiones();
         }
     }
 

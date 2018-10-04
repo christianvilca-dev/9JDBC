@@ -16,7 +16,7 @@ public class MySQLConexion {
     // Acceso a nivel de paquete
     Connection conectar() throws SQLException{
         Connection conexion = null;
-        String url = "jdbc:mysql://127.0.0.1/prueba";
+        String url = "jdbc:mysql://127.0.0.1/prueba1?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
         try {
             conexion = DriverManager.getConnection(url, "root", "abcd.1234");
         } catch (SQLException sqle) {
