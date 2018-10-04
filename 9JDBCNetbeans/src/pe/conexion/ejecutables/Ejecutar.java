@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Scanner;
 import pe.conexion.ado.interfaces.UsuarioDAO;
 import pe.conexion.ado.mysql.MySQLUsuario;
+import pe.conexion.ado.postgresql.PSQLConexion;
+import pe.conexion.ado.postgresql.PSQLUsuario;
 import pe.conexion.excepciones.ExcepcionGeneral;
 import pe.conexion.modelos.Usuario;
 
@@ -18,25 +20,30 @@ import pe.conexion.modelos.Usuario;
  */
 public class Ejecutar {
     public static void main(String[] args) {
-//        Usuario user = new Usuario();
-//        user.setIdUsuario(5);
-//        user.setUsuario("Tom");
-//        user.setClave("otraclave");
-//        user.setCorreo("tom@gmail.com");
+        Usuario user = new Usuario();
+        user.setIdUsuario(2);
+        user.setUsuario("Tom");
+        user.setClave("otraclave");
+        user.setCorreo("tom@gmail.com");
         
-        MySQLUsuario mysqluser = new MySQLUsuario();
+        PSQLUsuario psqluser = new PSQLUsuario();
         try {
-            List<Usuario> listado = mysqluser.listar();
-            
-            for (Usuario u : listado) {
-                System.out.println(u);
-            }
+            psqluser.insert(user);
+            System.out.println("Usuario registrado con el id: " + user.getIdUsuario());
         } catch (ExcepcionGeneral eg) {
             System.out.println(eg.getMessage());
         }
-//        Usuario{idUsuario=1, usuario=christian, clave=1234, correo=christian@gmail.com}
-//        Usuario{idUsuario=2, usuario=Usuario2, clave=1234, correo=usuario@gmail.com}
-//        Usuario{idUsuario=4, usuario=Tom, clave=d9ffaca46d5990ec39501bcdf22ee7a1, correo=tom@gmail.com}
-//        Usuario{idUsuario=6, usuario=Tom, clave=d9ffaca46d5990ec39501bcdf22ee7a1, correo=tom@gmail.com}
+        
+        
+//        MySQLUsuario mysqluser = new MySQLUsuario();
+//        try {
+//            List<Usuario> listado = mysqluser.listar();
+//            
+//            for (Usuario u : listado) {
+//                System.out.println(u);
+//            }
+//        } catch (ExcepcionGeneral eg) {
+//            System.out.println(eg.getMessage());
+//        }
     }
 }
