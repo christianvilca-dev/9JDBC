@@ -25,7 +25,7 @@ public class Ejecutar {
         
         MySQLUsuario mysqluser = new MySQLUsuario();
         try {
-            mysqluser.modificar(user);
+            mysqluser.eliminar(user);
         } catch (ExcepcionGeneral eg) {
             System.out.println(eg.getMessage());
         }

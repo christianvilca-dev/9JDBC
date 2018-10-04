@@ -68,7 +68,7 @@ public class MySQLUsuario implements UsuarioDAO{
     }
 
     @Override
-    public void modificar(Usuario o) throws ExcepcionGeneral{
+    public void modificar(Usuario o){
         try {
             conexion = new MySQLConexion().conectar();
             sentencia = conexion.prepareStatement(MODIFICAR);
@@ -88,7 +88,18 @@ public class MySQLUsuario implements UsuarioDAO{
 
     @Override
     public void eliminar(Usuario o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            conexion = new MySQLConexion().conectar();
+            sentencia = conexion.prepareStatement(ELIMINAR);
+            sentencia.setInt(1, o.getIdUsuario());
+            if (sentencia.executeUpdate() ==0) { // Devuelve la cantidad de registros que fueron afectados
+                throw new ExcepcionGeneral("No se elimino ningun registro");
+            }
+        } catch (SQLException sqle) {
+            throw new ExcepcionGeneral(sqle.getMessage());
+        } finally {
+            cerrarConexiones();
+        }
     }
 
     @Override
