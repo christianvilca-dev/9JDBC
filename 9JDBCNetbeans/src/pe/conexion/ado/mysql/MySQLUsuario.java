@@ -68,8 +68,22 @@ public class MySQLUsuario implements UsuarioDAO{
     }
 
     @Override
-    public void modificar(Usuario o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void modificar(Usuario o) throws ExcepcionGeneral{
+        try {
+            conexion = new MySQLConexion().conectar();
+            sentencia = conexion.prepareStatement(MODIFICAR);
+            sentencia.setString(1, o.getUsuario());
+            sentencia.setString(2, o.getClave());
+            sentencia.setString(3, o.getCorreo());
+            sentencia.setInt(4, o.getIdUsuario());
+            if (sentencia.executeUpdate() ==0) { // Devuelve la cantidad de registros que fueron afectados
+                throw new ExcepcionGeneral("No se modifico ningun registro");
+            }
+        } catch (SQLException sqle) {
+            throw new ExcepcionGeneral(sqle.getMessage());
+        } finally {
+            cerrarConexiones();
+        }
     }
 
     @Override

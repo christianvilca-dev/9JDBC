@@ -8,6 +8,7 @@ package pe.conexion.ejecutables;
 import java.util.Scanner;
 import pe.conexion.ado.interfaces.UsuarioDAO;
 import pe.conexion.ado.mysql.MySQLUsuario;
+import pe.conexion.excepciones.ExcepcionGeneral;
 import pe.conexion.modelos.Usuario;
 
 /**
@@ -17,11 +18,16 @@ import pe.conexion.modelos.Usuario;
 public class Ejecutar {
     public static void main(String[] args) {
         Usuario user = new Usuario();
+        user.setIdUsuario(5);
         user.setUsuario("Tom");
-        user.setClave("Tom");
+        user.setClave("otraclave");
         user.setCorreo("tom@gmail.com");
         
         MySQLUsuario mysqluser = new MySQLUsuario();
-        mysqluser.insert(user);
+        try {
+            mysqluser.modificar(user);
+        } catch (ExcepcionGeneral eg) {
+            System.out.println(eg.getMessage());
+        }
     }
 }
