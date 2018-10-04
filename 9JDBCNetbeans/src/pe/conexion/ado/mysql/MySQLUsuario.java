@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import pe.conexion.ado.interfaces.UsuarioDAO;
+import pe.conexion.excepciones.ExcepcionGeneral;
 import pe.conexion.modelos.Usuario;
 
 /**
@@ -28,13 +29,38 @@ public class MySQLUsuario implements UsuarioDAO{
     private final String OBTENER = "SELECT id_usuario, usuario, clave, correo FROM usuarios";
     
     private Connection conexion;
-    // Recomendado usarlo asi no halla parametros en vez de statement
+    // Recomendado usarlo asi no halla parametros en vez de 
+    // ("statement" -> 
+    // unParametro = "' or 1 = 1 --'";
+    // "insert into tabla (a,b) values ('" + unParametro +"', '" + otroParametro +"')"; )
+    // Con lo que se evita ataques "sqlInjection"
     private PreparedStatement sentencia;
     private ResultSet resultados;
     
     @Override
-    public void insert(Usuario o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void insert(Usuario o) throws ExcepcionGeneral{
+        try {
+            conexion = new MySQLConexion().conectar();
+            sentencia = conexion.prepareStatement(INSERTAR);
+            sentencia.setString(1, o.getUsuario());
+            sentencia.setString(2, o.getClave());
+            sentencia.setString(3, o.getCorreo());
+            // executeUpdate = INSERT, UPDATE, DELETE
+            // executeQuery = SELECT
+            if (sentencia.executeUpdate() ==0) { // Devuelve la cantidad de registros que fueron afectados
+                throw new ExcepcionGeneral("No se inserto el registro");
+            }
+            // Devuelve un set de resultados(registros) con las llaves que se han generado
+            // ubicado antes del primer registro
+            resultados = sentencia.getGeneratedKeys(); 
+            // Para saber si hay registros se utiliza "next()" y devuelve "true", en el ultimo registro devuelve "false"
+            if (resultados.next()) {
+                // Obtener el dato entero de la primera columna
+                o.setIdUsuario(resultados.getInt(1));
+            }
+        } catch (SQLException sqle) {
+            throw new ExcepcionGeneral(sqle.getMessage());
+        }
     }
 
     @Override
