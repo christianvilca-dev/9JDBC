@@ -17,17 +17,19 @@ import pe.conexion.modelos.Usuario;
  */
 public class Ejecutar {
     public static void main(String[] args) {
-        Usuario user = new Usuario();
-        user.setIdUsuario(5);
-        user.setUsuario("Tom");
-        user.setClave("otraclave");
-        user.setCorreo("tom@gmail.com");
+//        Usuario user = new Usuario();
+//        user.setIdUsuario(5);
+//        user.setUsuario("Tom");
+//        user.setClave("otraclave");
+//        user.setCorreo("tom@gmail.com");
         
         MySQLUsuario mysqluser = new MySQLUsuario();
         try {
-            mysqluser.eliminar(user);
+            Usuario usuario = mysqluser.obtenerPorId(4);
+            System.out.println(usuario);
         } catch (ExcepcionGeneral eg) {
             System.out.println(eg.getMessage());
         }
+//        Usuario{idUsuario=4, usuario=Tom, clave=d9ffaca46d5990ec39501bcdf22ee7a1, correo=tom@gmail.com}
     }
 }

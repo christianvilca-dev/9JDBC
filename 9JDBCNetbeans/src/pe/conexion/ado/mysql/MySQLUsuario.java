@@ -103,8 +103,26 @@ public class MySQLUsuario implements UsuarioDAO{
     }
 
     @Override
-    public void obtenerPorId(Integer k) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Usuario obtenerPorId(Integer k) {
+        Usuario usuario = null;
+        try {
+            conexion = new MySQLConexion().conectar();
+            sentencia = conexion.prepareStatement(OBTENERPORID);
+            sentencia.setInt(1, k);
+            resultados = sentencia.executeQuery();
+            if (resultados.next()) {
+                usuario = new Usuario();
+                usuario.setIdUsuario(resultados.getInt("id_usuario"));
+                usuario.setUsuario(resultados.getString("usuario"));
+                usuario.setClave(resultados.getString("clave"));
+                usuario.setCorreo(resultados.getString("correo"));
+            }
+        } catch (SQLException sqle) {
+            throw new ExcepcionGeneral(sqle.getMessage());
+        } finally {
+            cerrarConexiones();
+        }
+        return usuario;
     }
 
     @Override
