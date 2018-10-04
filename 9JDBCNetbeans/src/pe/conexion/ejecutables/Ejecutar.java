@@ -20,19 +20,50 @@ import pe.conexion.modelos.Usuario;
  */
 public class Ejecutar {
     public static void main(String[] args) {
+        
+        Scanner teclado = new Scanner(System.in);
+        System.out.println("Seleccione la BD que va a usar");
+        System.out.println("1. Postgresql");
+        System.out.println("2. MySQL");
+        int opcion = teclado.nextInt();
+        
+        UsuarioDAO userDAO = null;
+        
+        switch (opcion){
+            case 1:
+                userDAO = new PSQLUsuario();
+                break;
+            case 2:
+                userDAO = new MySQLUsuario();
+                break;
+            default:
+                System.out.println("No es una opcion valida");
+        }
+        
         Usuario user = new Usuario();
         user.setIdUsuario(2);
-        user.setUsuario("Tom");
-        user.setClave("otraclave");
-        user.setCorreo("tom@gmail.com");
+        user.setUsuario("otro");
+        user.setClave("otro");
+        user.setCorreo("otro@gmail.com");
         
-        PSQLUsuario psqluser = new PSQLUsuario();
         try {
-            psqluser.insert(user);
-            System.out.println("Usuario registrado con el id: " + user.getIdUsuario());
+            // No importa si es una BD relacional o no relacional
+            userDAO.insert(user);
+//            List<Usuario> listado = userDAO.listar();
+//            for (Usuario u : listado) {
+//                System.out.println(u);
+//            }
         } catch (ExcepcionGeneral eg) {
             System.out.println(eg.getMessage());
         }
+        
+//        PSQLUsuario psqluser = new PSQLUsuario();
+//        try {
+//            psqluser.insert(user);
+//            System.out.println("Usuario registrado con el id: " + user.getIdUsuario());
+//        } catch (ExcepcionGeneral eg) {
+//            System.out.println(eg.getMessage());
+//        }
         
         
 //        MySQLUsuario mysqluser = new MySQLUsuario();

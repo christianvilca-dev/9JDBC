@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import pe.conexion.ado.interfaces.UsuarioDAO;
 import pe.conexion.ado.mysql.MySQLConexion;
@@ -70,7 +71,25 @@ public class PSQLUsuario implements UsuarioDAO{
 
     @Override
     public List<Usuario> listar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Usuario> listado = new ArrayList<>();
+        try {
+            conexion = new PSQLConexion().conectar();
+            sentencia = conexion.prepareStatement(OBTENER);
+            resultados = sentencia.executeQuery();
+            while (resultados.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setIdUsuario(resultados.getInt("id_usuario"));
+                usuario.setUsuario(resultados.getString("usuario"));
+                usuario.setClave(resultados.getString("clave"));
+                usuario.setCorreo(resultados.getString("correo"));
+                listado.add(usuario);
+            }
+        } catch (SQLException sqle) {
+            throw new ExcepcionGeneral(sqle.getMessage());
+        } finally {
+            cerrarConexiones();
+        }
+        return listado;
     }
     
     private void cerrarConexiones(){
